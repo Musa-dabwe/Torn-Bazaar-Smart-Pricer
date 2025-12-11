@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Torn Bazaar Quick Pricer
+// @name         Torn Bazaar Smart Pricer
 // @namespace    http://tampermonkey.net/
 // @version      1.8
 // @description  Auto-fill bazaar items with market-based pricing

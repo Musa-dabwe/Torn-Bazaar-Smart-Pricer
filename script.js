@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Torn Bazaar Quick Pricer
 // @namespace    http://tampermonkey.net/
-// @version      2.1
+// @version      2.2
 // @description  Auto-fill bazaar items with market-based pricing
 // @author       Zedtrooper [3028329]
 // @license      MIT

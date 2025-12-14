@@ -3,13 +3,13 @@
 **Author:** Zedtrooper [3028329]  
 **Current Version:** 2.1
 
-A Tampermonkey userscript for the text-based RPG [Torn](https://www.torn.com) that streamlines the process of adding items to your **Bazaar**. It automatically fetches current market values via the Torn API and prices your items competitively with a single click.
+A userscript for the text-based RPG [Torn](https://www.torn.com) that streamlines the process of adding items to your **Bazaar**. It automatically fetches current market values via the Torn API and prices your items competitively with a single click.
 
 ---
 
 ## 🚀 Features
 
-* **One-Click Pricing:** Adds a "**💰 Add**" button to every item in your Bazaar "Manage" page.
+* **One-Click Pricing:** Adds a "**Add**" button to every item in your Bazaar "Manage" page.
 * **Live Market Data:** Fetches the real-time **market value** for items using the official Torn API.
 * **Smart Auto-Fill:** Automatically fills both the price and the maximum available quantity for the item.
 * **Customizable Discounts:** Set a default percentage to **undercut the market average** (e.g., list at 1% below market value).
@@ -23,7 +23,7 @@ A Tampermonkey userscript for the text-based RPG [Torn](https://www.torn.com) th
 1.  **Install a Userscript Manager:**
     * [Tampermonkey](https://www.tampermonkey.net/) (Recommended for Chrome/Edge/Firefox)
     * [Violentmonkey](https://violentmonkey.top/)
-    * Also supports Torn PDA android app
+    * Also supports Torn PDA android app. You can get it on the [Play Store](https://play.google.com/store/apps/details?id=com.manuito.tornpda).
 2.  **Install the Script:**
     * Head over to (https://greasyfork.org/en/scripts/558562-torn-bazaar-quick-pricer) tap the green install button on the website to install the script.
 3.  **Reload Torn:**
@@ -53,7 +53,7 @@ You can adjust your pricing strategy at any time:
 
 1.  Navigate to your **Bazaar** in Torn.
 2.  Click on **"Manage Items"**.
-3.  You will see a green **💰 Add** button appear next to each item.
+3.  You will see a green **Add** button appear next to each item.
 4.  Click the button:
     * The script fetches the current market value.
     * It calculates your price (Market Value - Discount).
@@ -68,4 +68,4 @@ You can adjust your pricing strategy at any time:
 * This script is not affiliated with or endorsed by Torn.
 
 ---
-*Created by Zedtrooper [3028329]*
+*Created by [Zedtrooper [3028329]](https://www.torn.com/profiles.php?XID=3028329)*

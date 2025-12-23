@@ -7,7 +7,7 @@ A userscript for the text-based RPG [Torn](https://www.torn.com) that streamline
 
 ---
 
-## 🚀 Features
+## Features
 
 * **One-Click Pricing:** Adds a "**Add**" button to every item in your Bazaar "Manage" page.
 * **Live Market Data:** Fetches the real-time **market value** for items using the official Torn API.
@@ -18,7 +18,7 @@ A userscript for the text-based RPG [Torn](https://www.torn.com) that streamline
 
 ---
 
-## 🛠️ Installation
+## Installation
 
 1.  **Install a Userscript Manager:**
     * [Tampermonkey](https://www.tampermonkey.net/) (Recommended for Chrome/Edge/Firefox)
@@ -31,7 +31,7 @@ A userscript for the text-based RPG [Torn](https://www.torn.com) that streamline
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### API Key Setup
 Upon first use, the script will prompt you for your **Public API Key**.
@@ -49,7 +49,7 @@ You can adjust your pricing strategy at any time:
 
 ---
 
-## 📖 How to Use
+## How to Use
 
 1.  Navigate to your **Bazaar** in Torn.
 2.  Click on **"Manage Items"**.
@@ -62,7 +62,7 @@ You can adjust your pricing strategy at any time:
 
 ---
 
-## ⚠️ Disclaimer
+## Disclaimer
 
 * **Use at your own risk.** While this script uses public API data and does not automate actions, always adhere to Torn's scripting rules.
 * This script is not affiliated with or endorsed by Torn.

@@ -7,16 +7,16 @@ A Tampermonkey and Torn PDA userscript for the text-based RPG Torn that streamli
 
 Main Changes:
 
-    @run-at timing adjusted - Changed to document-end to improve compatibility with PDA (Progressive Web App or similar)
+@run-at timing adjusted - Changed to document-end to improve compatibility with PDA (Progressive Web App or similar)
 
-    Increased wait time - Extended delays to 2000ms (2 seconds) to allow more time for PDA's rendering processes
+Increased wait time - Extended delays to 2000ms (2 seconds) to allow more time for PDA's rendering processes
 
-    Enhanced retry mechanism - Implemented more aggressive retry logic with 20 attempts occurring every 500ms to ensure successful execution
+Enhanced retry mechanism - Implemented more aggressive retry logic with 20 attempts occurring every 500ms to ensure successful execution
 
-    Dark mode improvements - Simplified styling approach specifically for PDA's dark mode
+Dark mode improvements - Simplified styling approach specifically for PDA's dark mode
 
-    Enhanced debugging - Added better console logging capabilities to help troubleshoot issues
+Enhanced debugging - Added better console logging capabilities to help troubleshoot issues
 
-    jQuery removed - Completely eliminated jQuery dependency, likely moving to vanilla JavaScript
+jQuery removed - Completely eliminated jQuery dependency, likely moving to vanilla JavaScript
 
-    Safety check added - Added fallback handling if the DOMContentLoaded event has already fired
+Safety check added - Added fallback handling if the DOMContentLoaded event has already fired.

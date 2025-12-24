@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Torn Bazaar Quick Pricer
 // @namespace    http://tampermonkey.net/
-// @version      2.6
+// @version      2.4
 // @description  Auto-fill bazaar items with market-based pricing (PDA optimized)
 // @author       Zedtrooper [3028329]
 // @license      MIT
@@ -13,14 +13,14 @@
 // @run-at       document-end
 // @homepage     https://github.com/Musa-dabwe/Torn-Bazaar-Quick-Pricer
 // @supportURL   https://github.com/Musa-dabwe/Torn-Bazaar-Quick-Pricer/issues
-// @downloadURL  https://github.com/Musa-dabwe/Torn-Bazaar-Quick-Pricer/raw/main/torn-bazaar-quick-pricer.user.js
-// @updateURL    https://github.com/Musa-dabwe/Torn-Bazaar-Quick-Pricer/raw/main/torn-bazaar-quick-pricer.user.js
+// @downloadURL https://update.greasyfork.org/scripts/558562/Torn%20Bazaar%20Quick%20Pricer.user.js
+// @updateURL https://update.greasyfork.org/scripts/558562/Torn%20Bazaar%20Quick%20Pricer.meta.js
 // ==/UserScript==
 
 (function() {
     'use strict';
 
-    console.log('[BazaarQuickPricer] v2.6 Starting (PDA optimized)...');
+    console.log('[BazaarQuickPricer] v2.4 Starting (PDA optimized)...');
 
     // Configuration
     const CONFIG = {
@@ -34,6 +34,7 @@
     const processedItems = new WeakSet();
     let mutationDebounceTimer = null;
     const isMobile = window.innerWidth <= 784;
+    let settingsIconAdded = false; // Track if settings icon was added
 
     // Detect dark mode
     function isDarkMode() {
@@ -55,7 +56,7 @@
     // Custom SVGs
     const addButtonSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3,7.5v11c0,1.38,1.12,2.5,2.5,2.5h1c.83,0,1.5,.67,1.5,1.5s-.67,1.5-1.5,1.5h-1c-3.03,0-5.5-2.47-5.5-5.5V7.5C0,4.47,2.47,2,5.5,2h.35c.56-1.18,1.76-2,3.15-2h2c1.39,0,2.59,.82,3.15,2h.35c1.96,0,3.78,1.05,4.76,2.75,.42,.72,.17,1.63-.55,2.05-.24,.14-.49,.2-.75,.2-.52,0-1.02-.27-1.3-.75-.45-.77-1.28-1.25-2.17-1.25h-.35c-.56,1.18-1.76,2-3.15,2h-2c-1.39,0-2.59-.82-3.15-2h-.35c-1.38,0-2.5,1.12-2.5,2.5Zm14.5,6.5h-1c-.83,0-1.5,.67-1.5,1.5s.67,1.5,1.5,1.5h1c.83,0,1.5-.67,1.5-1.5s-.67-1.5-1.5-1.5Zm6.5-.5v6c0,2.48-2.02,4.5-4.5,4.5h-5c-2.48,0-4.5-2.02-4.5-4.5v-6c0-2.48,2.02-4.5,4.5-4.5h5c2.48,0,4.5,2.02,4.5,4.5Zm-3,0c0-.83-.67-1.5-1.5-1.5h-5c-.83,0-1.5,.67-1.5,1.5v6c0,.83,.67,1.5,1.5,1.5h5c.83,0,1.5-.67,1.5-1.5v-6Z"/></svg>`;
 
-    const settingsSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="m15.98,7.136c.003.051.02.099.02.151v.714c0,.552.447,1,1,1s1-.448,1-1v-.714c0-1.79-.966-3.453-2.52-4.341l-4-2.286c-1.53-.875-3.432-.875-4.962,0L2.519,2.945C.965,3.833,0,5.497,0,7.287v6.344c0,1.758.939,3.406,2.452,4.302l4,2.369c.771.457,1.652.698,2.548.698.552,0,1-.448,1-1v-9.43l5.98-3.434ZM3.511,4.682l4-2.286c.919-.525,2.059-.524,2.978,0l4,2.286c.276.158.508.365.716.593l-6.221,3.573-6.216-3.536c.214-.243.455-.465.744-.63Zm3.96,13.899l-4-2.369c-.908-.538-1.471-1.526-1.471-2.581v-6.344c0-.035.013-.068.014-.102l5.986,3.406v8.239c-.183-.065-.36-.148-.529-.248Zm15.793.798l-.983-.566c.129-.418.218-.853.218-1.313s-.09-.895-.218-1.313l.983-.566c.479-.275.644-.887.367-1.366-.274-.477-.887-.644-1.365-.367l-.977.563c-.605-.652-1.393-1.126-2.289-1.33v-1.121c0-.552-.447-1-1-1s-1,.448-1,1v1.121c-.896.205-1.685.678-2.289,1.33l-.977-.563c-.479-.277-1.089-.11-1.365.367-.276.479-.112,1.09.367,1.366l.983.566c-.129.418-.218.853-.218,1.313s.09.895.218,1.313l-.983.566c-.479.275-.643.887-.367,1.366.185.321.521.5.867.5.169,0,.341-.043.498-.134l.977-.563c.605.652,1.393,1.126,2.289,1.33v1.121c0,.552.447,1,1,1s1-.448,1-1v-1.121c.896-.205,1.685-.678,2.289-1.33l.977.563c.157.091.329.134.498.134.346,0,.683-.18.867-.5.276-.479.111-1.09-.367-1.366Zm-5.265.621c-1.379,0-2.5-1.122-2.5-2.5s1.121-2.5,2.5-2.5,2.5,1.122,2.5,2.5-1.121,2.5-2.5,2.5Z"/></svg>`;
+    const settingsSVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="m15.98,7.136c.003.051.02.099.02.151v.714c0,.552.447,1,1,1s1-.448,1-1v-.714c0-1.79-.966-3.453-2.52-4.341l-4-2.286c-1.53-.875-3.432-.875-4.962,0L2.519,2.945C.965,3.833,0,5.497,0,7.287v6.344c0,1.758.939,3.406,2.452,4.302l4,2.369c.771.457,1.652.698,2.548.698.552,0,1-.448,1-1v-9.43l5.98-3.434ZM3.511,4.682l4-2.286c.919-.525,2.059-.524,2.978,0l4,2.286c.276.158.508.365.716.593l-6.221,3.573-6.216-3.536c.214-.243.455-.465.744-.63Zm3.96,13.899l-4-2.369c-.908-.538-1.471-1.526-1.471-2.581v-6.344c0-.035.013-.068.014-.102l5.986,3.406v8.239c-.183-.065-.36-.148-.529-.248Zm15.793.798l-.983-.566c.129-.418.218-.853.218-1.313s-.09-.895-.218-1.313l.983-.566c.479-.275.644-.887.367-1.366-.274-.477-.887-.644-1.365-.367l-.977.563c-.605-.652-1.393-1.126-2.289-1.33v-1.121c0-.552-.447-1-1-1s-1,.448-1,1v1.121c-.896.205-1.685.678-2.289,1.33l-.977-.563c-.479-.277-1.089-.11-1.365.367-.276.479-.112,1.09.367,1.366l.983.566c-.129.418-.218.853-.218,1.313s.09.895.218,1.313l-.983.566c-.479.275-.643.887-.367,1.366.185.321.521.5.867.5.169,0,.341-.043.498-.134l.977-.563c.605.652,1.393,1.126,2.289,1.33v1.121c0,.552.447,1,1,1s1-.448,1-1v-1.121c.896-.205,1.685-.678,2.289-1.33l.977.563c.157.091.329.134.498.134.346,0,.683-.18.867-.5.276-.479.111-1.09-.367-1.366Zm-5.265.621c-1.379,0-2.5-1.122-2.5-2.5s1.121-2.5,2.5-2.5,2.5,1.122,2.5,2.5-1.121,2.5-2.5,2.5Z"/></svg>`;
 
     function showApiKeyPrompt() {
         const overlay = document.createElement('div');
@@ -108,7 +109,7 @@
                 </div>
                 <div style="margin-top:15px;padding-top:15px;border-top:1px solid #555;text-align:center;">
                     <small style="color:#999;font-size:12px;">
-                        v2.6 | <a href="https://github.com/Musa-dabwe/Torn-Bazaar-Quick-Pricer" target="_blank" style="color:#2196F3;">GitHub</a>
+                        v2.4 | <a href="https://github.com/Musa-dabwe/Torn-Bazaar-Quick-Pricer" target="_blank" style="color:#2196F3;">GitHub</a>
                     </small>
                 </div>
             </div>
@@ -207,10 +208,17 @@
 
     function addQuickPriceButton(itemElement) {
         if (processedItems.has(itemElement)) return;
-        processedItems.add(itemElement);
-
+        
         const nameWrap = itemElement.querySelector('div.title-wrap div.name-wrap');
         if (!nameWrap) return;
+
+        // Check if button already exists
+        if (nameWrap.querySelector('.quick-price-btn')) {
+            processedItems.add(itemElement);
+            return;
+        }
+
+        processedItems.add(itemElement);
 
         const image = itemElement.querySelector('div.image-wrap img');
         if (!image) return;
@@ -301,6 +309,9 @@
     }
 
     function addSettingsIcon() {
+        // Prevent duplicate settings icons
+        if (settingsIconAdded) return;
+        
         let attempts = 0;
         const maxAttempts = 20;
         
@@ -309,11 +320,20 @@
             const iconsContainer = document.querySelector('div[class*="linksContainer"]');
             
             if (iconsContainer) {
+                // Check if settings button already exists
+                if (iconsContainer.querySelector('[data-quick-pricer-settings]')) {
+                    clearInterval(tryAddIcon);
+                    settingsIconAdded = true;
+                    return;
+                }
+                
                 clearInterval(tryAddIcon);
+                settingsIconAdded = true;
                 
                 const textColor = getTextColor();
                 
                 const settingsBtn = document.createElement('button');
+                settingsBtn.setAttribute('data-quick-pricer-settings', 'true');
                 settingsBtn.style.cssText = 'background:none;border:none;padding:5px;cursor:pointer;display:flex;align-items:center;gap:5px;';
                 
                 const iconWrapper = document.createElement('span');
